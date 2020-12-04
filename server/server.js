@@ -14,9 +14,29 @@ const server = new ApolloServer({
     resolvers:{
         Query,
         Mutation
+    },
+    // we get the http request here - and add it to the context. This 
+    // can be used in queries and resolvers. We need to add this configuration
+    // to apollo server to get the 'context' - ie get access to the request
+    // and response - in this case we just need request
+    context:({ req })=>{
+        // we are adding authorization property to to req.headders
+        req.headers.authorization = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmM3N2EzNmFiMTkyNjE3ZDJiZjEwYjYiLCJlbWFpbCI6ImFzZHNkQGdkLmNvbSIsImlhdCI6MTYwNzA4NDg1MiwiZXhwIjoxNjA3Njg5NjUyfQ.3JkDBZUP0IsLI-wnDampvPi9EjjMaTerBH58XyjS8To';
+
+        return {req}
     }
 
 })
+
+// {
+//     "data": {
+//       "updateUserEmailPass": {
+//         "_id": "5fc77a36ab192617d2bf10b6",
+//         "email": "asdsd@gd.com",
+//         "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmM3N2EzNmFiMTkyNjE3ZDJiZjEwYjYiLCJlbWFpbCI6ImFzZHNkQGdkLmNvbSIsImlhdCI6MTYwNzA4NDg1MiwiZXhwIjoxNjA3Njg5NjUyfQ.3JkDBZUP0IsLI-wnDampvPi9EjjMaTerBH58XyjS8To"
+//       }
+//     }
+//   }
 
 
 
