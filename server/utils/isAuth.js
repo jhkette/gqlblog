@@ -30,8 +30,6 @@ const authorize = (req, verify= false) => {
             return !verify ? thowAuthError(): req;
         }
 
-        console.log(decodedJWT)
-
         req.isAuth = true;
         req._id = decodedJWT._id;
         req.email = decodedJWT.email;

@@ -1,6 +1,7 @@
   
 const { AuthenticationError } = require('apollo-server-express')
 const { User } = require('../../models/user');
+const { Category } = require('../../models/category');
 const authorize = require('../../utils/isAuth');
 
 module.exports = {
@@ -30,6 +31,23 @@ module.exports = {
           }catch(err){
             throw err
           }
-        }
+        },
+        categories:async(parent,{catId},context,info)=>{
+          try{
+            // empty object - if you pass an empty object into
+            // mongo you get all the categories
+            // but if there is a catId (destructured from arguments)
+            // we create an object with the property '_id'
+              let catQuery = {};
+              if(catId){
+                  catQuery['_id'] = catId
+              }
+
+              const categories = await Category.find(catQuery);
+              return categories;
+          }catch(err){
+              throw err;
+          }
+      }
     }
 }

@@ -2,8 +2,10 @@ const { request } = require("express");
 // import errors
 const { UserInputError, AuthenticationError, ApolloError } = require('apollo-server-express')
 const {User} = require('../../models/user')
+const {Post} = require('../../models/post')
 const authorize = require('../../utils/isAuth');
 const { userOwnership } = require('../../utils/tools');
+const { Category } = require('../../models/category');
 
 module.exports = {
     Mutation:{
@@ -103,7 +105,7 @@ module.exports = {
                 if(!getToken) { 
                     throw new AuthenticationError('Something went wrong, try again');
                 }
-
+                // return token
                 return { ...getToken._doc, token:getToken.token}
             }
              catch(err){
@@ -113,12 +115,16 @@ module.exports = {
         },
         createPost: async(parent,{ fields },context,info)=> {
             try {
+                // get req object - which will be user object
                 const req = authorize(context.req);
                 /// validate...
                 const post = new Post({
                     title: fields.title,
                     excerpt:fields.excerpt,
                     content:fields.content,
+                    category:fields.category,
+                    // the author is the  id from the req object - this is from
+                    // authorize function call above
                     author: req._id,
                     status: fields.status
                 });
@@ -127,7 +133,24 @@ module.exports = {
             } catch(err){
                 throw err                
             }
+        },
+        createCategory:  async(parent,args,context,info)=> {
+            try {
+                // req is going to be user object
+                const req = authorize(context.req);
+                /// validate
+                // create new category
+                const category = new Category({
+                    author: req._id,
+                    name: args.name
+                });
+                const result = await category.save();
+                return { ...result._doc}
+            } catch(err){
+                throw err                
+            }
         }
+
 
     }
 }
