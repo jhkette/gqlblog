@@ -13,6 +13,8 @@ const typeDefs = gql`
         signUp(fields:AuthInput!):User!
         createPost(fields:PostInput!):Post!
         createCategory(name:String!):Category!
+        updateCategory(catId:ID!,name:String!):Category
+        deleteCategory(catId:String!):Category
     }
 
     type Post {
