@@ -61,5 +61,5 @@ app.listen(PORT, ()=> {
 })
 })
 .catch(err => {
-    consolelog(err)
+    console.log(err)
 })
